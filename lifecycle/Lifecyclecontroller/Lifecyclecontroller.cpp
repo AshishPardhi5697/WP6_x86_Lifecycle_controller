@@ -1,3 +1,16 @@
+
+/* Copyright (c) 2026 KPIT Technologies Ltd.
+ *
+ * All rights reserved.
+ *
+ * This source code is proprietary and confidential information of
+ * KPIT Technologies Ltd. Unauthorized copying, modification,
+ * distribution, or use of this file, via any medium, is strictly
+ * prohibited unless prior written permission is obtained from
+ * KPIT Technologies Ltd.
+ */
+
+
 // vendor/honda/lifecycle/Lifecyclecontroller/Lifecyclecontroller.cpp
 //
 // Behavior (ACK timing aligned with REPORT):
