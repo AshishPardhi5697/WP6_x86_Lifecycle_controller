@@ -1,7 +1,7 @@
 cc_binary {
     name: "Lifecyclecontroller",
 
-    vendor: true,          // IMPORTANT: keep it vendor since your SEPolicy is under vendor/honda/...
+    vendor: true,         
     srcs: ["Lifecyclecontroller.cpp"],
 
     init_rc: ["Lifecyclecontroller.rc"],
@@ -12,10 +12,8 @@ cc_binary {
         "libbinder_ndk",
         "libprotobuf-cpp-lite",
         
-        // This is the key NDK AIDL VHAL lib (you already used it earlier):
         "android.hardware.automotive.vehicle-V2-ndk",
         
-        // AIDL NDK lib for the interface (name must match your tree)
     "com.honda.hardware.automotive.vehicle.emulatormessage-V1-ndk",
     ],
     static_libs: [
