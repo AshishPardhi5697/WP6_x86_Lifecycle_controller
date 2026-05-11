@@ -1,0 +1,39 @@
+# Lifecyclecontroller.te
+
+type Lifecyclecontroller, domain;
+type Lifecyclecontroller_exec, exec_type, vendor_file_type, file_type;
+
+# Run as an init-launched vendor daemon domain
+init_daemon_domain(Lifecyclecontroller)
+
+# NDK binder client usage (libbinder_ndk)
+binder_use(Lifecyclecontroller)
+
+# Allow creating and using vsock sockets (NO ioctl - blocked by platform neverallow)
+allow Lifecyclecontroller self:vsock_socket {
+  create
+  read write
+  getattr
+  setopt getopt
+  bind listen accept
+  shutdown
+};
+
+# Allow client access to Vehicle HAL (AIDL IVehicle)
+hal_client_domain(Lifecyclecontroller, hal_vehicle)
+
+# If you later see AVC denials, enable only what logs demand:
+# allow Lifecyclecontroller hal_vehicle_service:service_manager find;
+# binder_call(Lifecyclecontroller, hal_vehicle)
+
+# Allow lookup of Honda EmulatorMessage AIDL service in servicemanager
+allow Lifecyclecontroller hal_honda_EmulatorMessageInterface:service_manager find;
+
+# Allow writing to /dev/kmsg (only if your daemon is logging there)
+allow Lifecyclecontroller kmsg_device:chr_file write;
+
+# HAL -> Lifecyclecontroller binder callback
+# binder_call(hal_honda_EmulatorMessageInterface, Lifecyclecontroller)
+
+# (Sometimes needed)
+binder_use(Lifecyclecontroller)

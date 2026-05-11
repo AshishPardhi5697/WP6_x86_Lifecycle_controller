@@ -1,0 +1,7 @@
+service Lifecyclecontroller /vendor/bin/Lifecyclecontroller
+	class late_start
+	user root
+	group root
+	seclabel u:r:Lifecyclecontroller:s0
+	restart_period 5
+
