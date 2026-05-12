@@ -14,7 +14,7 @@
 // vendor/honda/lifecycle/Lifecyclecontroller/Lifecyclecontroller.cpp
 //
 // Behavior (ACK timing aligned with REPORT):
-//   "On" => During Cold boot state the IVI is in WAIT_FOR_VHAL state, when send the ON request from HLD 
+//   "On" => During Cold boot state the IVI is in WAIT_FOR_VHAL state, when send the ON request from HLB 
 //            IVI goes from WAIT_FOR_VHAL to ON state.
 //   "Suspend" => Deep Sleep (Suspend-to-RAM): send REQ [SHUTDOWN_PREPARE(1), SLEEP_IMMEDIATELY(4)]
 //            wait for REPORT=DEEP_SLEEP_ENTRY(2) then send ACK to client,
@@ -23,8 +23,8 @@
 //   "Shutdown" => Shutdown immediate:          send REQ [SHUTDOWN_PREPARE(1), SHUTDOWN_IMMEDIATELY(1)]
 //            wait for REPORT=SHUTDOWN_START(5) then send ACK to client,
 //            then send REQ [FINISHED(3), 0] to complete
-//   "Resume" => In Resume usecase, first the IVI goes into suspend state, then it captures the Snapshot, when we do VM shutdown
-//                and then we Restore the IVI with Snapshot, it goes from WAIT_FOR_VHAL to ON state.
+//   "Resume" => In Resume usecase, first the IVI goes into suspend state, then it captures the Snapshot, then we do VM shutdown
+//                and then we Restore the IVI with Snapshot, 
 // Logs to logcat (logd). Subscribes to AP_POWER_STATE_REPORT and uses it to drive state.
 
 #include <sys/socket.h>
