@@ -18,7 +18,6 @@
 //            IVI goes from WAIT_FOR_VHAL to ON state.
 //   "Suspend" => Deep Sleep (Suspend-to-RAM): send REQ [SHUTDOWN_PREPARE(1), SLEEP_IMMEDIATELY(4)]
 //            wait for REPORT=DEEP_SLEEP_ENTRY(2) then send ACK to client,
-//            then send REQ [FINISHED(3), 0] to complete
 //
 //   "Shutdown" => Shutdown immediate:          send REQ [SHUTDOWN_PREPARE(1), SHUTDOWN_IMMEDIATELY(1)]
 //            wait for REPORT=SHUTDOWN_START(5) then send ACK to client,
