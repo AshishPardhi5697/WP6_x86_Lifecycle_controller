@@ -1,0 +1,97 @@
+diff --git a/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp b/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
+index 8fa2ba4..845f118 100644
+--- a/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
++++ b/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
+@@ -450,13 +450,34 @@ void FakeVehicleHardware::init() {
+     for (auto& [_, configDeclaration] : loadConfigDeclarations()) {
+         VehiclePropConfig cfg = configDeclaration.config;
+         VehiclePropertyStore::TokenFunction tokenFunction = nullptr;
+-
+         if (cfg.prop == toInt(VehicleProperty::AP_POWER_STATE_REQ)) {
+-            int config = GetIntProperty(POWER_STATE_REQ_CONFIG_PROPERTY, /*default_value=*/0);
+-            cfg.configArray[0] = config;
+-        } else if (cfg.prop == OBD2_FREEZE_FRAME) {
+-            tokenFunction = [](const VehiclePropValue& propValue) { return propValue.timestamp; };
+-        }
++    // DO NOT clobber the JSON configArray[0] (it contains VehicleApPowerStateConfigFlag bits).
++    // Use JSON as default, override only if ro.vendor.fake_vhal.ap_power_state_req.config is set.
++    int defaultConfig = 0;
++    if (!cfg.configArray.empty()) {
++        defaultConfig = cfg.configArray[0];
++    }
++ 
++    const int config = android::base::GetIntProperty(
++            POWER_STATE_REQ_CONFIG_PROPERTY, /*default_value=*/defaultConfig);
++ 
++    if (cfg.configArray.empty()) {
++        cfg.configArray.resize(1);
++    }
++    cfg.configArray[0] = config;
++ 
++    ALOGI("AP_POWER_STATE_REQ configArray[0]=0x%x (default=0x%x, prop=%s)",
++        cfg.configArray[0], defaultConfig, POWER_STATE_REQ_CONFIG_PROPERTY);
++} else if (cfg.prop == OBD2_FREEZE_FRAME) {
++    tokenFunction = [](const VehiclePropValue& propValue) { return propValue.timestamp; };
++}
++
++ //      if (cfg.prop == toInt(VehicleProperty::AP_POWER_STATE_REQ)) {
++ //          int config = GetIntProperty(POWER_STATE_REQ_CONFIG_PROPERTY, /*default_value=*/0);
++ //           cfg.configArray[0] = config;
++ //       } else if (cfg.prop == OBD2_FREEZE_FRAME) {
++ //           tokenFunction = [](const VehiclePropValue& propValue) { return propValue.timestamp; };
++  //      }
+ 
+         mServerSidePropStore->registerProperty(cfg, tokenFunction);
+         if (obd2frame::FakeObd2Frame::isDiagnosticProperty(cfg)) {
+@@ -569,7 +590,7 @@ VhalResult<void> FakeVehicleHardware::setApPowerStateReport(const VehiclePropVal
+             writeValueAndNotifyChange(*createApPowerStateReq(VehicleApPowerStateReq::ON), true /* updateStatus */);
+             writeValueAndNotifyChange(createHondaIcbNotification(toInt(AccState::ACC_ON),
+                                                                 toInt(KeyofftimerStartUpState::OFF),
+-                                                                toInt(HalInitializeState::COMPLETED)),
++                                                               toInt(HalInitializeState::COMPLETED)),
+                                     true);
+             *isSpecialValue = false;
+             break;
+@@ -584,12 +605,12 @@ VhalResult<void> FakeVehicleHardware::setApPowerStateReport(const VehiclePropVal
+             // event would be generated. However, Car Service always expect a property change event
+             // even though there is not actual state change.
+ 
+-            processPowerStateEvent(value);
++            processPowerStateEvent(value); 
+             *isSpecialValue = false;
+             break;
+         case toInt(VehicleApPowerStateReport::HIBERNATION_EXIT):
+             mServerSidePropStore->removeValuesForProperty(
+-                    toInt(VehicleProperty::AP_POWER_STATE_REQ));
++                   toInt(VehicleProperty::AP_POWER_STATE_REQ));
+             prop = createApPowerStateReq(VehicleApPowerStateReq::ON);
+ 
+             // ALWAYS update status for generated property value
+@@ -601,6 +622,7 @@ VhalResult<void> FakeVehicleHardware::setApPowerStateReport(const VehiclePropVal
+                        << getErrorMsg(writeResult);
+             }
+             break;
++           
+         case toInt(VehicleApPowerStateReport::DEEP_SLEEP_ENTRY):
+             writeValueAndNotifyChange(createHondaIcbNotification(toInt(AccState::ACC_OFF),
+                                                                 toInt(KeyofftimerStartUpState::OFF),
+@@ -1745,7 +1767,7 @@ VhalResult<void> FakeVehicleHardware::maybeSetSpecialValue(const VehiclePropValu
+             LOG(INFO) << "HONDA_POWER_STATE_REQ reached! value:" << value.value.int32Values[0];
+             switch (value.value.int32Values[0]) {
+             case toInt(VehicleHondaPowerStateReq::NORMAL_RUNNING):
+-               // writeValueAndNotifyChange(*createApPowerStateReq(VehicleApPowerStateReq::ON), true /* updateStatus */);
++                //writeValueAndNotifyChange(*createApPowerStateReq(VehicleApPowerStateReq::ON), true /* updateStatus */);
+                LOG(INFO) << "Cold boot test: ignore NORMAL_RUNNING, keep WAIT_FOR_VHAL";
+                 processPowerStateEvent(value);
+                 break;
+@@ -3998,8 +4020,8 @@ void FakeVehicleHardware::processPowerStateEvent(const VehiclePropValue &value)
+             break;
+         case toInt(VehicleHondaPowerStateReq::NORMAL_RUNNING):
+             if (mPowerState == WAIT_FOR_VHAL) {
+-             //   mPowerState = ON;
+-                LOG(INFO) << __func__ << " State transitions from WAIT_FOR_VHAL to ON";
++               // mPowerState = ON;
++                LOG(INFO) << __func__ << " Cold boot gating active, stay in WAIT_FOR_VHAL";
+             } else {
+                 LOG(WARNING) << __func__ << " Illegal state :" << mPowerState;
+             }

@@ -1,0 +1,39 @@
+From 40f9758190259324324c52c851b6c3c93f87fc07 Mon Sep 17 00:00:00 2001
+From: Rohith Pandith <rohith.pandith@kpit.com>
+Date: Thu, 16 Apr 2026 17:34:31 +0900
+Subject: [PATCH 2/4] Add Read Access to AP_POWER_STATE_REPORT for Ack
+
+---
+ .../1.0/default/generated_lib/3/cpp/AccessForVehicleProperty.h  | 2 +-
+ .../default/generated_lib/3/java/AccessForVehicleProperty.java  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vehicle/1.0/default/generated_lib/3/cpp/AccessForVehicleProperty.h b/vehicle/1.0/default/generated_lib/3/cpp/AccessForVehicleProperty.h
+index 7245e64..29b6f88 100644
+--- a/vehicle/1.0/default/generated_lib/3/cpp/AccessForVehicleProperty.h
++++ b/vehicle/1.0/default/generated_lib/3/cpp/AccessForVehicleProperty.h
+@@ -124,7 +124,7 @@ std::unordered_map<int32_t /*VehicleProperty|HondaVehicleProperty*/, VehicleProp
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::STORAGE_ENCRYPTION_BINDING_SEED), VehiclePropertyAccess::READ_WRITE},
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::ENV_OUTSIDE_TEMPERATURE), VehiclePropertyAccess::READ},
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::AP_POWER_STATE_REQ), VehiclePropertyAccess::READ},
+-        {::android::hardware::automotive::vehicle::toInt(VehicleProperty::AP_POWER_STATE_REPORT), VehiclePropertyAccess::WRITE},
++        {::android::hardware::automotive::vehicle::toInt(VehicleProperty::AP_POWER_STATE_REPORT), VehiclePropertyAccess::READ_WRITE},
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::AP_POWER_BOOTUP_REASON), VehiclePropertyAccess::READ},
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::DISPLAY_BRIGHTNESS), VehiclePropertyAccess::READ_WRITE},
+         {::android::hardware::automotive::vehicle::toInt(VehicleProperty::PER_DISPLAY_BRIGHTNESS), VehiclePropertyAccess::READ_WRITE},
+diff --git a/vehicle/1.0/default/generated_lib/3/java/AccessForVehicleProperty.java b/vehicle/1.0/default/generated_lib/3/java/AccessForVehicleProperty.java
+index 61a7590..7cc65e0 100644
+--- a/vehicle/1.0/default/generated_lib/3/java/AccessForVehicleProperty.java
++++ b/vehicle/1.0/default/generated_lib/3/java/AccessForVehicleProperty.java
+@@ -113,7 +113,7 @@ public final class AccessForVehicleProperty {
+         Map.entry(VehicleProperty.STORAGE_ENCRYPTION_BINDING_SEED, VehiclePropertyAccess.READ_WRITE),
+         Map.entry(VehicleProperty.ENV_OUTSIDE_TEMPERATURE, VehiclePropertyAccess.READ),
+         Map.entry(VehicleProperty.AP_POWER_STATE_REQ, VehiclePropertyAccess.READ),
+-        Map.entry(VehicleProperty.AP_POWER_STATE_REPORT, VehiclePropertyAccess.WRITE),
++        Map.entry(VehicleProperty.AP_POWER_STATE_REPORT, VehiclePropertyAccess.READ_WRITE),
+         Map.entry(VehicleProperty.AP_POWER_BOOTUP_REASON, VehiclePropertyAccess.READ),
+         Map.entry(VehicleProperty.DISPLAY_BRIGHTNESS, VehiclePropertyAccess.READ_WRITE),
+         Map.entry(VehicleProperty.PER_DISPLAY_BRIGHTNESS, VehiclePropertyAccess.READ_WRITE),
+-- 
+2.34.1
+

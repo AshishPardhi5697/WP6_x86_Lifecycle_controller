@@ -1,0 +1,25 @@
+From 1fe1d1efd4edbe3426bbb2e7c5f75b48275641d5 Mon Sep 17 00:00:00 2001
+From: Rohith Pandith <rohith.pandith@kpit.com>
+Date: Thu, 16 Apr 2026 17:37:26 +0900
+Subject: [PATCH 3/4] Add visibility for vsock_server
+
+---
+ vehicle/1.0/default/proto/Android.bp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/vehicle/1.0/default/proto/Android.bp b/vehicle/1.0/default/proto/Android.bp
+index 1758075..df86269 100644
+--- a/vehicle/1.0/default/proto/Android.bp
++++ b/vehicle/1.0/default/proto/Android.bp
+@@ -26,6 +26,8 @@ cc_library_static {
+     name: "com.honda.hardware.automotive.vehicle-V1-emu-libproto-native",
+     visibility: [
+         "//vendor/honda/hardware/emulator/implements/automotive:__subpackages__",
++        "//vendor/honda/lifecycle/vsock_server:__subpackages__",
++
+     ],
+     vendor: true,
+     host_supported: true,
+-- 
+2.34.1
+

@@ -1,0 +1,39 @@
+From de5932b8dfe31e2074b50e059a91747333455f8e Mon Sep 17 00:00:00 2001
+From: Rohith Pandith <rohith.pandith@kpit.com>
+Date: Thu, 16 Apr 2026 17:28:21 +0900
+Subject: [PATCH 1/4] Add defualt value for AP_POWER_STATE_REPORT & REQ
+
+---
+ .../impl/default_config/config/DefaultProperties.json    | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/vehicle/1.0/default/impl/default_config/config/DefaultProperties.json b/vehicle/1.0/default/impl/default_config/config/DefaultProperties.json
+index 58de613..1b051d7 100644
+--- a/vehicle/1.0/default/impl/default_config/config/DefaultProperties.json
++++ b/vehicle/1.0/default/impl/default_config/config/DefaultProperties.json
+@@ -3228,7 +3228,7 @@
+         {
+             "property": "VehicleProperty::AP_POWER_STATE_REQ",
+             "configArray": [
+-                3
++                1
+             ],
+             "defaultValue": {
+                 "int32Values": [
+@@ -3238,7 +3238,12 @@
+             }
+         },
+         {
+-            "property": "VehicleProperty::AP_POWER_STATE_REPORT"
++            "property": "VehicleProperty::AP_POWER_STATE_REPORT",
++            "defaultValue": {
++                "int32Values": [
++                    "VehicleApPowerStateReport::ON"
++		]
++	    }
+         },
+         {
+             "property": "VehicleProperty::AP_POWER_BOOTUP_REASON",
+-- 
+2.34.1
+

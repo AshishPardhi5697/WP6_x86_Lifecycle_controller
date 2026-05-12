@@ -1,0 +1,35 @@
+From 4c44a95f019b510f8c9f9f40b1825ffc78dfe03b Mon Sep 17 00:00:00 2001
+From: Rohith Pandith <rohith.pandith@kpit.com>
+Date: Thu, 16 Apr 2026 17:55:00 +0900
+Subject: [PATCH 4/4] Stop at the wait-for-hal for coldboot usecase
+
+---
+ .../impl/fake_impl/hardware/src/FakeVehicleHardware.cpp      | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp b/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
+index 90695ca..2a153b6 100644
+--- a/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
++++ b/vehicle/1.0/default/impl/fake_impl/hardware/src/FakeVehicleHardware.cpp
+@@ -1745,7 +1745,8 @@ VhalResult<void> FakeVehicleHardware::maybeSetSpecialValue(const VehiclePropValu
+             LOG(INFO) << "HONDA_POWER_STATE_REQ reached! value:" << value.value.int32Values[0];
+             switch (value.value.int32Values[0]) {
+             case toInt(VehicleHondaPowerStateReq::NORMAL_RUNNING):
+-                writeValueAndNotifyChange(*createApPowerStateReq(VehicleApPowerStateReq::ON), true /* updateStatus */);
++                //writeValueAndNotifyChange(*createApPowerStateReq(VehicleApPowerStateReq::ON), true  updateStatus );
++                LOG(INFO) << "Cold boot test: ignore NORMAL_RUNNING, keep WAIT_FOR_VHAL";
+                 processPowerStateEvent(value);
+                 break;
+             case toInt(VehicleHondaPowerStateReq::PREPARE_SUSPEND):
+@@ -3997,7 +3998,7 @@ void FakeVehicleHardware::processPowerStateEvent(const VehiclePropValue &value)
+             break;
+         case toInt(VehicleHondaPowerStateReq::NORMAL_RUNNING):
+             if (mPowerState == WAIT_FOR_VHAL) {
+-                mPowerState = ON;
++                //mPowerState = ON;
+                 LOG(INFO) << __func__ << " State transitions from WAIT_FOR_VHAL to ON";
+             } else {
+                 LOG(WARNING) << __func__ << " Illegal state :" << mPowerState;
+-- 
+2.34.1
+

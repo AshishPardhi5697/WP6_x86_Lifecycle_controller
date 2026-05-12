@@ -1,0 +1,24 @@
+diff --git a/emu_cf_x86_64_honda_g_car.mk b/emu_cf_x86_64_honda_g_car.mk
+index 5b7dd8d..f52e90d 100755
+--- a/emu_cf_x86_64_honda_g_car.mk
++++ b/emu_cf_x86_64_honda_g_car.mk
+@@ -13,14 +13,15 @@ include device/honda/products/emulator_common/cuttlefish/device.mk
+ ifneq ($(RRO_PRODUCT_PACKAGES),)
+ PRODUCT_PACKAGES += $(RRO_PRODUCT_PACKAGES)
+ endif
++
++#--------Lifecyclecontroller--------
++PRODUCT_PACKAGES += \
++           Lifecyclecontroller
++
+ ifneq ($(RRO_PRODUCT_PACKAGES_VENDOR),)
+ PRODUCT_PACKAGES += $(RRO_PRODUCT_PACKAGES_VENDOR)
+ endif
+ 
+-#--------lifecycle vsock server --------
+-PRODUCT_PACKAGES += \
+-           vsock_server
+-
+ PRODUCT_NAME := emu_cf_x86_64_honda_g_car
+ PRODUCT_DEVICE := $(PRODUCT_NAME)
+ PRODUCT_BRAND := Honda

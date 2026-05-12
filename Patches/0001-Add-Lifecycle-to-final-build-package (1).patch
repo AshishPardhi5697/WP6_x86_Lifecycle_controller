@@ -1,0 +1,35 @@
+From ac42530a6d1b42098f269787357af686de1c70f9 Mon Sep 17 00:00:00 2001
+From: Rohith Pandith <rohith.pandith@kpit.com>
+Date: Thu, 16 Apr 2026 17:17:27 +0900
+Subject: [PATCH] Add Lifecycle to final build package
+
+---
+ emu_cf_x86_64_honda_g_car/emu_cf_x86_64_honda_g_car.mk | 4 ++++
+ emulator_common/common/sepolicy/misc/sepolicy.mk       | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/emu_cf_x86_64_honda_g_car/emu_cf_x86_64_honda_g_car.mk b/emu_cf_x86_64_honda_g_car/emu_cf_x86_64_honda_g_car.mk
+index d8c8d3e..b6917bb 100755
+--- a/emu_cf_x86_64_honda_g_car/emu_cf_x86_64_honda_g_car.mk
++++ b/emu_cf_x86_64_honda_g_car/emu_cf_x86_64_honda_g_car.mk
+@@ -27,3 +27,7 @@ BUILD_HOST := $(PRODUCT_BRAND)
+ BUILD_HOSTNAME := $(PRODUCT_BRAND)
+ BUILD_PRODUCT := $(PRODUCT_NAME)
+ BUILD_USERNAME := $(PRODUCT_BRAND)
++
++#--------lifecycle vsock server --------
++PRODUCT_PACKAGES += \
++           vsock_server
+diff --git a/emulator_common/common/sepolicy/misc/sepolicy.mk b/emulator_common/common/sepolicy/misc/sepolicy.mk
+index 0f2103f..1828061 100644
+--- a/emulator_common/common/sepolicy/misc/sepolicy.mk
++++ b/emulator_common/common/sepolicy/misc/sepolicy.mk
+@@ -2,3 +2,5 @@ SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/honda/products/emulator_common/common
+ SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += device/honda/products/emulator_common/common/sepolicy/misc/system_ext/public
+ BOARD_VENDOR_SEPOLICY_DIRS += device/honda/products/emulator_common/common/sepolicy/misc/vendor
+ BOARD_SEPOLICY_DIRS += device/honda/products/emulator_common/common/sepolicy/misc/board
++# Lifecycle specific selinux policy
++BOARD_VENDOR_SEPOLICY_DIRS += vendor/honda/lifecycle/sepolicy/vendor
+-- 
+2.34.1
+
